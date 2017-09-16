@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoscowMetro1.1", "MoscowMetro1.1\MoscowMetro1.1.csproj", "{D2C48109-D7B8-4A21-B132-A08DB046F755}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MoscowMetroDatabase", "MoscowMetroDatabase\MoscowMetroDatabase.sqlproj", "{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{D2C48109-D7B8-4A21-B132-A08DB046F755}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2C48109-D7B8-4A21-B132-A08DB046F755}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2C48109-D7B8-4A21-B132-A08DB046F755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C03AD23C-AC1D-4A0E-BA18-9D294FE14B93}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
