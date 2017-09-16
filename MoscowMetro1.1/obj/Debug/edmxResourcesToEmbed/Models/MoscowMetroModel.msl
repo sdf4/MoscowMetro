@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MoscowMetroModelStoreContainer" CdmEntityContainer="MoscowMetroEntities">
+    <EntitySetMapping Name="MetroRoutes">
+      <EntityTypeMapping TypeName="MoscowMetroModel.MetroRoute">
+        <MappingFragment StoreEntitySet="MetroRoute">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="SequenceOfStations" ColumnName="SequenceOfStations" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Stations">
+      <EntityTypeMapping TypeName="MoscowMetroModel.Station">
+        <MappingFragment StoreEntitySet="Station">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Relations" ColumnName="Relations" />
+          <ScalarProperty Name="Line" ColumnName="Line" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,204 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@Scripts.Render("~/bundles/mosmetro")
+
+
+<div class="row" ng-app="MoscowMetroApp" ng-controller="metroRoutesController">
+
+    <h4>Построить маршрут:</h4>
+
+    <div class="form-inline">
+        <div class="form-group">
+            <select class="form-control" id="selectStation1"></select>
+        </div>
+        <div class="form-group">
+            <select class="form-control" id="selectStation2"></select>
+        </div>
+        <button class="btn btn-default" onclick='drawPathByStations(MoscowMetroPathFinder.findShortestPath($("#selectStation1").val(), $("#selectStation2").val()))'>Построить</button>
+    </div>
+
+    <div id="path" style="display:none">
+        <div id="stationsSequence" style="margin-top: 20px; margin-bottom: 10px">
+
+        </div>
+
+        <div>
+
+            <form id="antiForgeryForm">
+                @Html.AntiForgeryToken()
+            </form>
+
+            <input style="display:none" id="inputName" ng-model="newRoute.Name" type="text" value="test" />
+            <input style="display:none" id="inputUserId" ng-model="newRoute.UserId" type="text" value="test" />
+            <input style="display:none" id="inputSequenceOfStations" ng-model="newRoute.SequenceOfStations" type="text" value="test" />
+            <button class="btn btn-default" ng-click="add(newRoute)">Сохранить</button>
+        </div>
+
+    </div>
+
+    <div  class="container">
+        <strong class="error">{{ error }}</strong>
+
+        <div ng-repeat="route in MetroRoutes">
+            <div style="margin-top: 10px;">
+                {{ route.SequenceOfStations }}
+                <button class="btn btn-default" ng-click="delete(route)">Удалить</button>
+            </div>
+        </div>  
+    </div> 
+</div>
+
+<br />
+
+
+<div class="row">
+    <object id="alphasvg" type="image/svg+xml" data="/Content/Moscow_metro_map_ru_sb.svg">
+        Your browser does not support SVG
+    </object>
+</div>
+
+
+
+<script>
+
+    var a = document.getElementById("alphasvg");
+    var fillSelect1 = true;
+    var svgDoc;
+    var currentPath;
+
+    a.addEventListener("load", function () {
+
+        svgDoc = a.contentDocument;
+
+        //var coords = {};
+
+        for (var k in MoscowMetroMap) {
+            $('#selectStation1')
+                .append($("<option></option>")
+                    .attr("value", k)
+                    .text(k));
+            $('#selectStation2')
+                .append($("<option></option>")
+                    .attr("value", k)
+                    .text(k));
+
+            var svgElement = svgDoc.getElementById(k);
+
+            if (svgElement != null) {
+                svgElement.addEventListener("mousedown", function () {
+                    if (fillSelect1) {
+                        $('#selectStation1').val(this.id);
+                    } else {
+                        $('#selectStation2').val(this.id);
+                    }
+
+                    fillSelect1 = !fillSelect1;
+                    
+                }, false);
+            }
+
+            //coords[k] = findCoordsByStationNameFromSvg(k);
+
+        }
+
+        //console.log(coords);
+
+    }, false);
+
+
+    function drawLine(coords1, coords2) {
+
+        var svgNS = "http://www.w3.org/2000/svg";
+
+        var aLine = document.createElementNS(svgNS, 'line');
+
+        aLine.setAttribute('x1', coords1.x);
+        aLine.setAttribute('y1', coords1.y);
+        aLine.setAttribute('x2', coords2.x);
+        aLine.setAttribute('y2', coords2.y);
+        aLine.setAttribute('stroke', "#0000ff");
+        aLine.setAttribute('stroke-width', 10);
+
+        svgDoc.getElementById("markers").appendChild(aLine);
+
+    }
+
+    function clearMarkers() {
+        var el = svgDoc.getElementById("markers");
+        while (el.firstChild) {
+            el.removeChild(el.firstChild);
+        }
+    }
+
+    function drawPathByStations(stations) {
+
+        if (stations == null) {
+            return;
+        }
+
+        currentPath = stations;
+        $("#stationsSequence").html(stations.join(", "));
+
+        var inputSequenceOfStations = $("#inputSequenceOfStations");
+        var inputUserId = $("#inputUserId");
+        var inputName = $("#inputName");
+
+        inputSequenceOfStations.val(stations.join(", ")).trigger('input');
+        inputUserId.val("1");
+        inputName.val("1");
+
+        inputSequenceOfStations.trigger('input'); 
+        inputSequenceOfStations.trigger('change');
+        inputUserId.trigger('input');
+        inputUserId.trigger('change');
+        inputName.trigger('input');
+        inputName.trigger('change');
+        
+
+        $("#path").show();
+
+        clearMarkers();
+
+        var coords1 = {x:0, y:0};
+
+        for (var k in stations) {
+            var coords2 = findCoordsByStationName(stations[k]);
+            if (coords2 != null) {
+                if (coords1.x != 0 && coords1.y != 0) {
+                    drawLine(coords1, coords2); 
+                }
+                coords1 = coords2;
+            }
+        }
+    }
+
+    function findCoordsByStationName(stationName) {
+        return moscovMetroStationsCoords[stationName];
+    }
+
+    function findCoordsByStationNameFromSvg(stationName) {
+
+        e = svgDoc.getElementById(stationName);
+
+        if (e != null) {
+
+            if (e.getAttribute("x") != null) {
+                return { x: e.getAttribute("x"), y: e.getAttribute("y") };
+            } else if (e.getAttribute("transform") != null) {
+
+                var numbers = e.getAttribute("transform").split(/\D+/g);
+
+                console.log(e.getAttribute("transform"));
+
+                console.log({ x: numbers[1], y: numbers[2] });
+
+                return { x: numbers[1], y: numbers[2]};
+            }
+        }
+
+        return null;
+    }
+
+</script>
